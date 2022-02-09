@@ -32,6 +32,7 @@ var app = http.createServer(function(request, response) {
       </body>
       </html>
       `;
+      // template 사용
         response.end(template);
     })
 
