@@ -1,0 +1,10 @@
+콘솔에서 입력받기
+var args=process.argv;
+
+전송 성공 > writeHead value=200 //writeHead(200)
+전송 실패 > writeHead value=404 //writeHead(404)
+
+File read시 커맨드를 입력하는 디렉토리를 main이 속한
+디렉토리로 변경을 해줘야 readFile부분이 제대로 실행된다.
+
+=== : 값이 같으면서 데이터 타입도 같은지 비교하는 연산자
