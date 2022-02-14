@@ -1,0 +1,7 @@
+form 의 action속성에 부여한 주소로 사용자가 입력한 데이터를 
+쿼리스트링으로 전송한다. method="post" 를 하게 되면 값이 노출되지 않고
+이에따라 보낼수있는 데이터의 크기도 크게 늘어남.
+//default는 get (데이터 가져올때사용) post : 데이터 전송시 사용
+
+response.writeHead(number)에 두번째인자로 {Location:주소}를 주면
+해당 주소로 리디렉션을 한다.
