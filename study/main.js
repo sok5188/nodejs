@@ -1,44 +1,19 @@
 var http = require("http");
 var fs = require("fs");
 var url = require("url");
-let qs = require("querystring");
-let template = {
-  HTML: function (title, list, body, control) {
-    return `
-              <!doctype html>
-              <html>
-              <head>
-               <title>WEB12 - ${title}</title>
-                <meta charset="utf-8">
-              </head>
-             <body>
-                <h1><a href="/">WEB</a></h1>
-                ${list}
-                ${control}
-               ${body}
-              </body>
-              </html>
-              `;
-  },
-  LIST: function (filelist) {
-    var list = "<ul>";
-    var i = 0;
-    while (i < filelist.length) {
-      list += `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
-      i += 1;
-    }
-
-    list = list + "</ul>";
-    return list;
-  },
-};
+const qs = require("querystring");
+let path = require("path");
+let template = require("./lib/template.js");
+const sanitizeHtml = require("sanitize-html");
 
 var app = http.createServer(function (request, response) {
   var _url = request.url;
+
   var queryData = url.parse(_url, true).query;
+
   var pathname = url.parse(_url, true).pathname;
+
   if (pathname === "/") {
-    //home
     if (queryData.id === undefined) {
       fs.readdir("./data", function (err, filelist) {
         var title = "Welcome";
@@ -57,19 +32,22 @@ var app = http.createServer(function (request, response) {
       });
     } else {
       fs.readdir("./data", function (err, filelist) {
-        fs.readFile(`data/${queryData.id}`, "utf8", function (err, data) {
+        let filteredID = path.parse(queryData.id).base;
+        fs.readFile(`data/${filteredID}`, "utf8", function (err, data) {
           var title = queryData.id;
+          var sanitizeTitle = sanitizeHtml(title);
+          var sanitizeData = sanitizeHtml(data);
           var list = template.LIST(filelist);
           var HTML = template.HTML(
             title,
             list,
-            `<h2>${title}</h2>
-          ${data}`,
+            `<h2>${sanitizeTitle}</h2>
+          ${sanitizeData}`,
             `
           <a href="/create">create</a> 
-          <a href="/update?id=${title}">update</a>
+          <a href="/update?id=${sanitizeTitle}">update</a>
           <form action="delete_process" method="post">
-            <input type="hidden" name="id" value=${title}>
+            <input type="hidden" name="id" value=${sanitizeTitle}>
             <input type="submit" value="delete">
           </form>
           `
@@ -85,6 +63,7 @@ var app = http.createServer(function (request, response) {
 
       data = "Hello, Node.js";
       var list = template.LIST(filelist);
+
       var html = template.HTML(
         title,
         list,
@@ -110,6 +89,8 @@ var app = http.createServer(function (request, response) {
     request.on("end", function () {
       let post = qs.parse(body);
       let title = post.title;
+
+      title = title.replace(/\s/g, ""); // 띄어쓰기 없애줌.
       let description = post.description;
       fs.writeFile(`data/${title}`, description, "utf8", function (err) {
         response.writeHead(302, { Location: `/?id=${title}` });
@@ -118,7 +99,8 @@ var app = http.createServer(function (request, response) {
     });
   } else if (pathname === "/update") {
     fs.readdir("./data", function (err, filelist) {
-      fs.readFile(`data/${queryData.id}`, "utf8", function (err, data) {
+      let filteredID = path.parse(queryData.id).base;
+      fs.readFile(`data/${filteredID}`, "utf8", function (err, data) {
         var title = queryData.id;
         var list = template.LIST(filelist);
         var html = template.HTML(
@@ -149,10 +131,16 @@ var app = http.createServer(function (request, response) {
     });
     request.on("end", function () {
       let post = qs.parse(body);
+
       let id = post.id;
       let title = post.title;
+      title = title.replace(/\s/g, "");
       let description = post.description;
       fs.rename(`data/${id}`, `data/${title}`, function (err) {
+        fs.unlink(`data/${id}`, function (err) {
+          response.writeHead(302, { Location: `/` });
+          response.end("ok");
+        });
         fs.writeFile(`data/${title}`, description, "utf8", function (err) {
           response.writeHead(302, { Location: `/?id=${title}` });
           response.end("ok");
@@ -165,9 +153,11 @@ var app = http.createServer(function (request, response) {
       body += data; //body에 콜백시마다 data추가
     });
     request.on("end", function () {
-      let post = qs.parse(body);
+      var post = qs.parse(body); //그냥querystring으로는 의미없는 구절인듯..??
       let id = post.id;
-      fs.unlink(`data/${id}`, function (err) {
+
+      let filteredID = path.parse(id).base;
+      fs.unlink(`data/${filteredID}`, function (err) {
         response.writeHead(302, { Location: `/` });
         response.end("ok");
       });

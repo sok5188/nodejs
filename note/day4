@@ -3,3 +3,5 @@ fs.rename(oldpath, newpath, callback)
 
 파일 삭제
 fs.unlink(filepath)
+
+함수자체가 값으로 여겨질 수 있다. 
