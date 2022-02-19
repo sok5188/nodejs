@@ -1,0 +1,15 @@
+db 연결
+var mysql = require("mysql");
+var db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "5188",
+  database: "opentutorials",
+  port: "3306",
+});
+db.connect();
+
+db.query(명령문,콜백함수) 의 형식으로 사용, 이때 명령문에서 감추어야 할 부분이 있다면
+?를 대신 넣고 명령문 작성후 [id,password] 이런식으로 배열안에 원소를 집어 넣어 주면 된다.
+
+db 다루는 문법도 공부해야 할 듯..
