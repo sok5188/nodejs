@@ -28,4 +28,19 @@ module.exports = {
     list = list + "</ul>";
     return list;
   },
+  authorSelect: function (authors, author_id) {
+    let tag = "";
+    let i = 0;
+    let selected = "";
+    while (i < authors.length) {
+      if (author_id === authors[i].id) {
+        selected = " selected";
+      }
+      tag += `<option value=${authors[i].id}${selected}>${authors[i].name}</option>`;
+      i++;
+    }
+    return ` <select name="author"> 
+        ${tag}
+      </select>`;
+  },
 };
