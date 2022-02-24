@@ -1,3 +1,13 @@
 lib 활용
 라이브러리 폴더를 하나 만들어서 거기에다가 exports.이름 = function(){} 형태로 생성해놓고
-메인에서는 require로 참조해서 쓰면 코드를 깔끔하게 정리할 수 있다.
+메인에서는 require로 참조해서 쓰면 코드를 깔끔하게 정리할 수 있다. (topic.js와author.js 처럼)
+
+LEFT JOIN
+SELECT * FROM topic LEFT JOIN author ON topic.author_id=author.id
+이렇게 쓰면 author의 id중 topic의 author_id 와 같은값을 author 테이블에 합쳐주는 역할, 만약 topic의 author_id값이 author테이블에 없다면 
+null 값이 author 테이블에 합쳐져서 출력된다.
+right join은 반대 inner join은 id값이 겹치는 것들만 출력된다
+
+보안을 위해 sanitize를 사용자가 입력한 값들에 다 적용을 시켜줘야 한다.
+
+1.검색기능 2.정렬 3.페이지기능
