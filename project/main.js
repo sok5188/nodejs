@@ -2,9 +2,7 @@ let fs = require("fs");
 let args = process.argv;
 let dirname = args[2];
 
-// modified process
-// 마지막 언더바 뒤에 E가 추가된다고 가정.
-//refactoring not yet.
+
 function is_modified(filename, list) {
   let tmp_file = filename.split("_");
   let tmp_size = tmp_file.length;
