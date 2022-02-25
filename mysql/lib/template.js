@@ -52,7 +52,6 @@ module.exports = {
   authorTable: function (authors) {
     let tag = "<table>";
     let i = 0;
-    let selected = "";
 
     while (i < authors.length) {
       tag += `<tr>
