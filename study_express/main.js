@@ -79,8 +79,7 @@ app.post("/create/process", (request, response) => {
     var title = post.title;
     var description = post.description;
     fs.writeFile(`data/${title}`, description, "utf8", function (err) {
-      response.writeHead(302, { Location: `/?id=${title}` });
-      response.end();
+      response.redirect(`/`);
     });
   });
 });
@@ -124,8 +123,7 @@ app.post("/update", (request, response) => {
     var description = post.description;
     fs.rename(`data/${id}`, `data/${title}`, function (error) {
       fs.writeFile(`data/${title}`, description, "utf8", function (err) {
-        response.writeHead(302, { Location: `/?id=${title}` });
-        response.end();
+        response.redirect(`/page/${title}`);
       });
     });
   });
@@ -140,8 +138,7 @@ app.post("/delete", (request, response) => {
     var id = post.id;
     var filteredId = path.parse(id).base;
     fs.unlink(`data/${filteredId}`, function (error) {
-      response.writeHead(302, { Location: `/` });
-      response.end();
+      response.redirect(`/`);
     });
   });
 });
