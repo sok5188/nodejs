@@ -1,0 +1,19 @@
+static 파일(이미지같은) 것들은 app.use(express.static("public")); 
+이렇게 static 파일이 있는 폴더를 지정해주고 html 코드로 이미지 주소를 넣어주면 된다.
+
+에러처리의 경우 (express 404) 
+1.미들웨어 가장 하단에 넣어주면 되는데
+이유는 미들웨어의 경우 순차적으로 실행하는데 미들웨어가 다 실행되었는데도 결과가 없으니
+error를 출력하는 미들웨어를 제일 마지막에 실행하게끔 하는것.
+2.err 변수를 이용해서 next()안의 값을 공백이나 route가아닌 다른 놈을 넣어주면 자동으로
+에러라고 여기게된다.
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+얘를 1의 미들웨어 보다도 더밑에 넣어주게 되면 에러 핸들러로써 처리하는데
+이때 express에서 err,req,res,next 인자를 가지는 함수를 자동으로 에러 핸들러 라고 여긴다.
+
+라우팅
+리팩토링 느낌인데 express 홈페이지 가서 읽어봐도 되고 짜놓은 코드만 봐도 기억해낼수있다.
+단어에 겁먹지 말기.

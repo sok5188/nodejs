@@ -1,0 +1,37 @@
+미들웨어
+다른사람이 만든 소프트웨어를 이용해서 내 소프트웨어를 향상시키는데 이때 딴사람이
+만든 소프트웨어를 미들웨어라고 한다.
+
+body-parser : request부분에 body라는 property가 생김 여지껏 body를 생성하던 과정을
+시켜주는 미들웨어 http://expressjs.com/en/resources/middleware/body-parser.html
+
+const express = require('express')
+const app = express()
+
+app.use((req, res, next) => {
+  console.log('Time:', Date.now())
+  next()
+})
+이런식으로 Application-level middleware 를 사용할 수 있는데
+next를 호출하냐 안하냐로 다음레벨의 미들웨어를 실행할 지 말 지를 정하는 것 
+next를 호출해야 다음으로 넘어간다!
+use에 첫인자로 경로를 주게된다면 해당경로로 접속했을때에만 실행되도록 할 수 있음
+또한 use가 아닌 get방식으로 사용하면 get방식으로 접속한 경우만 실행되게끔 할 수 있다
+(경로를 *로주면 모든경로를 의미한다)
+
+app.get('/user/:id', (req, res, next) => {
+  // if the user ID is 0, skip to the next route 저 밑에 special이 실행되는 것
+  if (req.params.id === '0') next('route')
+  // otherwise pass the control to the next middleware function in this stack
+  // 0이 아니면 이 스택에서의 다음 미들웨어를 실행 regular가 실행되는거
+  else next()
+}, (req, res, next) => {
+  // send a regular response
+  res.send('regular')
+})
+
+// handler for the /user/:id path, which sends a special response
+app.get('/user/:id', (req, res, next) => {
+  res.send('special')
+})
+
