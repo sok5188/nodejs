@@ -9,9 +9,10 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 var compression = require("compression");
 app.use(compression());
-
+app.use(helmet());
 var topicRouter = require("./routes/topic.js");
 var indexRouter = require("./routes/index.js");
+const { default: helmet } = require("helmet");
 
 app.get("*", function (request, response, next) {
   fs.readdir("./data", function (error, fileList) {

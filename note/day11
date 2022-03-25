@@ -1,0 +1,9 @@
+보안을 위해서 뭐 express 최신버전유지, https사용, 헬멧사용(npm install --save helmet)
+등등이 있음 https://expressjs.com/en/advanced/best-practice-security.html 홈페이지 참고
+
+Express application generator
+ https://expressjs.com/en/starter/generator.html
+ view에 있는것들은 (jade파일) 템플릿을 간단하게 표현하는 언어
+
+ express의 홈페이지에서 가이드든 getting started든 여러가지 애들이 있으니 찾아보세요
+ 템플릿 엔진같은 경우도 여러가지 있다.
