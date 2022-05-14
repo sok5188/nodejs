@@ -1,6 +1,12 @@
 module.exports = {
-    HTML:function(title, list, body, control) {
-        return `
+  HTML: function (
+    title,
+    list,
+    body,
+    control,
+    authStatus = '<a href="/login">login</a>'
+  ) {
+    return `
         <!doctype html>
         <html>
             <head>
@@ -8,6 +14,7 @@ module.exports = {
                 <meta charset="utf-8">
             </head>
             <body>
+                ${authStatus}
                 <h1><a href="/">WEB</a></h1>
                 ${list}
                 ${control}
@@ -15,15 +22,15 @@ module.exports = {
             </body>
         </html>
         `;
-    },
-    list:function(filelist) {
-        var list = '<ul>';
-        var i = 0;
-        while(i < filelist.length) {
-            list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
-            i = i + 1;
-        }
-        list = list+'</ul>';
-        return list;
+  },
+  list: function (filelist) {
+    var list = "<ul>";
+    var i = 0;
+    while (i < filelist.length) {
+      list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
+      i = i + 1;
     }
-}
+    list = list + "</ul>";
+    return list;
+  },
+};

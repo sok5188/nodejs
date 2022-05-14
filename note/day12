@@ -1,0 +1,19 @@
+쿠키 생성 create
+let cookie = require("cookie");
+서버안에 res.writeHead(200, {
+      "Set-Cookie": ["yummy_cookie=choco", "tasty_cookie=strawberry"],
+    }); 이런식으로 set 쿠키 해주면 된다. 한번 저장되면 그뒤로는 셋안해도 유지 됨
+
+쿠키 읽기 read
+let cookies = {};
+    if (req.headers.cookie !== undefined)
+      cookies = cookie.parse(req.headers.cookie);
+    console.log(cookies.yummy_cookie);
+if문으로 처리한 이유는 쿠키가 삭제되었을 경우 undefined 값으로 변하게 되는데 
+parse가 이를 처리하지 못하기때문에 if문으로 보호해준것 저런식으로 cookies 라는 객체에
+저장이 된다.
+
+홈페이지에서 영어,한국어 설정을 변경하면 언어쿠키 값이 변경되면서 다시 방문했을때 
+해당 언어로 보여지게 된다. 그리고, 우리가 로그인을 한다면 생기는 정보 sessionid같은 
+값은 해당 값으로 정보자체를 복호화할수는 없지만 값을 복사해서 쿠키를 추가한다면 동일하게
+로그인한 상태로 변경된다.
